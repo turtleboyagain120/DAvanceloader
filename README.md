@@ -12,7 +12,7 @@
 [![Encryption](https://img.shields.io/badge/Encryption-SHA256-red.svg)](https://github.com/turtleboyagain120/iframe-loader)
 [![Contributors](https://img.shields.io/badge/Contributors-Welcome-blueviolet.svg)](https://github.com/turtleboyagain120/iframe-loader)
 
-# ✨ Ultra Custom IFRAME Loader
+# ✨ DAvanceloader - the IFRAME Loader
 
 **Big, flexible iframe with advanced tracking, encryption, resize & analytics**
 
