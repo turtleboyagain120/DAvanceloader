@@ -1,3 +1,16 @@
+<img width="570" height="329" alt="image" src="https://github.com/user-attachments/assets/46e5bbff-a77b-4b19-8ea2-f3711b1f517a" />
+
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-1.0.0-green.svg)](https://github.com/turtleboyagain120/iframe-loader/releases)
+[![Status](https://img.shields.io/badge/Status-Active-brightgreen.svg)](https://github.com/turtleboyagain120/iframe-loader)
+[![JavaScript](https://img.shields.io/badge/Language-JavaScript-yellow.svg)](https://github.com/turtleboyagain120/iframe-loader)
+[![HTML5](https://img.shields.io/badge/HTML5-yes-orange.svg)](https://github.com/turtleboyagain120/iframe-loader)
+[![CSS3](https://img.shields.io/badge/CSS3-yes-blue.svg)](https://github.com/turtleboyagain120/iframe-loader)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://github.com/turtleboyagain120/iframe-loader)
+[![Analytics](https://img.shields.io/badge/Analytics-Event%20Queue-purple.svg)](https://github.com/turtleboyagain120/iframe-loader)
+[![Encryption](https://img.shields.io/badge/Encryption-SHA256-red.svg)](https://github.com/turtleboyagain120/iframe-loader)
+[![Contributors](https://img.shields.io/badge/Contributors-Welcome-blueviolet.svg)](https://github.com/turtleboyagain120/iframe-loader)
+
 # ✨ Ultra Custom IFRAME Loader
 
 **Big, flexible iframe with advanced tracking, encryption, resize & analytics**
