@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>.Ultra Custom IFRAME Loader V3</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <h1 class="title">✨ Ultra Custom IFRAME Loader <span class="version">V3</span></h1>
+      <p class="subtitle">Big, flexible iframe with advanced tracking, encryption, resize & analytics</p>
+
+      <div class="panel">
+        <label for="siteUrl">Website URL</label>
+        <input id="siteUrl" type="text" value="example.com" />
+
+        <label for="mode">Choose Loading Path</label>
+        <select id="mode">
+          <option value="direct">Direct Load</option>
+          <option value="pathHome">Path: /home</option>
+          <option value="pathIndex">Path: /index.html</option>
+          <option value="pathEmbed">Path: /embed</option>
+          <option value="queryIframe">Query: ?iframe=true</option>
+          <option value="queryUTM">Query: Custom UTM Params</option>
+          <option value="pathDashboard">Path: /dashboard</option>
+          <option value="pathMobile">Path: /mobile</option>
+          <option value="queryEmbed">Query: ?embed=true</option>
+          <option value="pathViewer">Path: /viewer</option>
+          <option value="smartPath">Smart Path Detection</option>
+          <option value="customPath">Custom Path...</option>
+        </select>
+        
+        <!-- Custom Path Input -->
+        <div id="customPathContainer" style="display:none; margin-top:10px;">
+          <label for="customPath">Custom Path</label>
+          <input id="customPath" type="text" placeholder="/custom/path" />
+        </div>
+
+        <!-- New Preset Selector -->
+        <div class="section-divider">🎯 Quick Presets</div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button onclick="applyPreset('default')" class="preset-btn">Default</button>
+          <button onclick="applyPreset('youtube')" class="preset-btn">YouTube</button>
+          <button onclick="applyPreset('github')" class="preset-btn">GitHub</button>
+          <button onclick="applyPreset('marketing')" class="preset-btn">Marketing</button>
+          <button onclick="applyPreset('ecommerce')" class="preset-btn">E-commerce</button>
+          <button onclick="applyPreset('docs')" class="preset-btn">Documentation</button>
+          <button onclick="createCustomPreset()" class="preset-btn custom-preset-btn">+ Custom</button>
+        </div>
+
+        <!-- Custom Preset Creator -->
+        <div id="customPresetCreator" style="display:none; background:#e0f2fe; padding:15px; border-radius:10px; margin-top:10px;">
+          <h3 style="margin-top:0; color:#0369a1;">Create Custom Preset</h3>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div>
+              <label for="customPresetName">Preset Name</label>
+              <input id="customPresetName" type="text" placeholder="My Custom Preset" />
+            </div>
+            <div>
+              <label for="customPresetUrl">Base URL</label>
+              <input id="customPresetUrl" type="text" placeholder="example.com" />
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; margin-top:10px;">
+            <button onclick="saveCustomPreset()" style="background:#0ea5e9; color:white;">Save Preset</button>
+            <button onclick="cancelCustomPreset()" style="background:#94a3b8; color:white;">Cancel</button>
+          </div>
+        </div>
+
+        <!-- AI Assistant -->
+        <div class="section-divider">🧠 AI Assistant</div>
+        <div style="display:grid; gap:10px; background:#f0f4ff; padding:14px; border-radius:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="aiPreloadToggle" checked />
+            <label for="aiPreloadToggle" style="margin:0; font-weight:400;">Enable AI Assistant</label>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button onclick="showAIPreloadInfo()" style="background:#8b5cf6; color:white; font-size:14px;">Learn how it works</button>
+            <button onclick="runFullAIAnalysis()" style="background:#ec4899; color:white; font-size:14px;">Run Full Analysis</button>
+          </div>
+          <p style="font-size:12px; color:#6b7280; margin:0;">Uses AI to optimize all aspects of your iframe. <span id="aiStatus">Ready</span></p>
+        </div>
+
+        <!-- Custom UTM Section (shown when UTM mode selected) -->
+        <div id="utmCustomPanel" style="display:none; gap:8px; background:#f0f4ff; padding:14px; border-radius:10px;">
+          <div class="section-divider" style="margin-top:0;">🎯 Custom UTM Parameters</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div>
+              <label for="utmSource">utm_source</label>
+              <input id="utmSource" type="text" value="iframe_loader" />
+            </div>
+            <div>
+              <label for="utmMedium">utm_medium</label>
+              <input id="utmMedium" type="text" value="embed" />
+            </div>
+            <div>
+              <label for="utmCampaign">utm_campaign</label>
+              <input id="utmCampaign" type="text" value="custom_viewer" />
+            </div>
+            <div>
+              <label for="utmTerm">utm_term</label>
+              <input id="utmTerm" type="text" placeholder="optional keyword" />
+            </div>
+            <div style="grid-column:span 2;">
+              <label for="utmContent">utm_content</label>
+              <input id="utmContent" type="text" placeholder="optional content variant" />
+            </div>
+          </div>
+          <button onclick="generateUTMVariants()" style="background:#10b981; color:white; margin-top:8px;">Generate A/B Test Variants</button>
+        </div>
+
+        <div class="api-group">
+          <label for="apiKey">API Key (optional)</label>
+          <input id="apiKey" type="text" value="oc_44r56tts9_44r56ttsr_6e58f382cd61e870eab5e42e241c60f799851bdc939cf222" readonly/>
+
+          <label for="keyFormat">How to attach the key</label>
+          <select id="keyFormat">
+            <option value="apikey">apikey=KEY</option>
+            <option value="token">token=KEY</option>
+            <option value="key">key=KEY</option>
+            <option value="access_token">access_token=KEY</option>
+            <option value="custom">Custom Format...</option>
+          </select>
+          
+          <!-- Custom Key Format Input -->
+          <div id="customKeyFormatContainer" style="display:none; margin-top:10px;">
+            <label for="customKeyFormat">Custom Format (use {key} for key value)</label>
+            <input id="customKeyFormat" type="text" placeholder="mykey={key}" />
+          </div>
+
+          <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+            <input type="checkbox" id="useApiKey" />
+            <label for="useApiKey" style="margin:0; font-weight:400;">Append key to URL</label>
+          </div>
+        </div>
+
+        <!-- Request Header Injection Section -->
+        <div class="section-divider">🔐 Custom Headers & Encryption</div>
+        <div style="display:grid; gap:10px; background:#f0f4ff; padding:14px; border-radius:10px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div>
+              <label for="trackingID">X-Tracking-ID</label>
+              <input id="trackingID" type="text" placeholder="campaign-abc-123" />
+            </div>
+            <div>
+              <label for="source">X-Source</label>
+              <input id="source" type="text" placeholder="linkedin-outreach" />
+            </div>
+            <div>
+              <label for="campaign">X-Campaign</label>
+              <input id="campaign" type="text" placeholder="q4-enterprise" />
+            </div>
+            <div>
+              <label for="customHeaderName">Custom Header Name</label>
+              <input id="customHeaderName" type="text" placeholder="X-Custom-Value" />
+            </div>
+            <div style="grid-column:span 2;">
+              <label for="customHeaderValue">Custom Header Value</label>
+              <input id="customHeaderValue" type="text" placeholder="my-custom-value" />
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+            <input type="checkbox" id="encryptParams" />
+            <label for="encryptParams" style="margin:0; font-weight:400;">Encrypt UTM & query parameters (SHA-256)</label>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button onclick="toggleEncryptionDetails()" style="background:#6366f1; color:white; font-size:14px;">Encryption Details</button>
+            <button onclick="testHeaders()" style="background:#8b5cf6; color:white; font-size:14px;">Test Headers</button>
+          </div>
+          <div id="encryptionDetails" style="display:none; background:#dbeafe; padding:10px; border-radius:8px; margin-top:8px;">
+            <p style="margin:0; font-size:13px;">Using SHA-256 encryption for query parameters. Hash: <span id="encryptionHash" style="font-family:monospace;"></span></p>
+          </div>
+          <p style="font-size:12px; color:#6b7280; margin:0;">Headers are injected via postMessage proxy. Encryption prevents DevTools tampering.</p>
+        </div>
+
+        <!-- Dynamic Resize Section -->
+        <div class="section-divider">📐 Dynamic Resize & Aspect Ratio</div>
+        <div style="display:grid; gap:10px; background:#f0f4ff; padding:14px; border-radius:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="autoResize" checked />
+            <label for="autoResize" style="margin:0; font-weight:400;">Auto-resize based on content</label>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div>
+              <label for="aspectRatio">Aspect Ratio</label>
+              <select id="aspectRatio">
+                <option value="16:9">16:9 (Widescreen)</option>
+                <option value="4:3">4:3 (Standard)</option>
+                <option value="21:9">21:9 (Ultrawide)</option>
+                <option value="1:1">1:1 (Square)</option>
+                <option value="custom">Custom...</option>
+              </select>
+            </div>
+            <div id="customAspectRatioContainer" style="display:none;">
+              <label for="customAspectRatio">Custom Ratio (W:H)</label>
+              <input id="customAspectRatio" type="text" placeholder="16:9" />
+            </div>
+            <div>
+              <label for="minHeight">Min Height</label>
+              <input id="minHeight" type="text" value="400px" />
+            </div>
+            <div>
+              <label for="maxHeight">Max Height</label>
+              <input id="maxHeight" type="text" value="2000px" />
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div>
+              <label for="resizeSpeed">Resize Speed</label>
+              <select id="resizeSpeed">
+                <option value="fast">Fast</option>
+                <option value="medium" selected>Medium</option>
+                <option value="smooth">Smooth</option>
+                <option value="instant">Instant</option>
+              </select>
+            </div>
+            <div>
+              <label for="resizeDebounce">Debounce (ms)</label>
+              <input id="resizeDebounce" type="number" value="250" min="0" max="2000" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="section-divider">📊 Analytics Event Queue</div>
+        <div style="display:grid; gap:10px; background:#f0f4ff; padding:14px; border-radius:10px;">
+          <label for="analyticsEndpoint">Analytics Endpoint</label>
+          <input id="analyticsEndpoint" type="text" value="https://httpbin.org/post" placeholder="https://your-analytics.com/collect" />
+          
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div>
+              <label for="analyticsBatchSize">Batch Size</label>
+              <input id="analyticsBatchSize" type="number" value="10" min="1" max="100" />
+            </div>
+            <div>
+              <label for="analyticsRetryDelay">Retry Delay (ms)</label>
+              <input id="analyticsRetryDelay" type="number" value="2000" min="100" max="60000" />
+            </div>
+          </div>
+          
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button onclick="flushAnalytics()" style="background:#10b981; color:white;">Flush Queue Now</button>
+            <button onclick="clearAnalyticsQueue()" style="background:#ef4444; color:white;">Clear Queue</button>
+            <button onclick="exportAnalytics()" style="background:#8b5cf6; color:white;">📥 Export Data</button>
+            <button onclick="viewAnalytics()" style="background:#0ea5e9; color:white;">👁️ View Events</button>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button onclick="saveSettings()" style="background:#3b82f6; color:white;">💾 Save Settings</button>
+            <button onclick="loadSettings()" style="background:#8b5cf6; color:white;">📂 Load Saved</button>
+            <button onclick="exportSettings()" style="background:#10b981; color:white;">📤 Export Config</button>
+            <button onclick="importSettings()" style="background:#f59e0b; color:white;">📥 Import Config</button>
+          </div>
+          <p id="queueStatus" style="font-size:12px; color:#374151; margin:4px 0 0;">Queue: 0 events | 0 failed retries</p>
+        </div>
+
+        <!-- Advanced Options Toggle -->
+        <div class="adv-toggle" onclick="toggleAdvanced()">
+          ⚙️ Advanced Visual Options <span id="advArrow">▼</span>
+        </div>
+        <div id="advancedPanel" class="advanced-panel">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+            <div>
+              <label for="iframeWidth">Width</label>
+              <input id="iframeWidth" type="text" value="100%" />
+            </div>
+            <div>
+              <label for="iframeHeight">Height</label>
+              <input id="iframeHeight" type="text" value="85vh" />
+            </div>
+            <div>
+              <label for="sandboxMode">Sandbox</label>
+              <select id="sandboxMode">
+                <option value="">None (full permissions)</option>
+                <option value="allow-scripts allow-same-origin">Scripts + Same Origin</option>
+                <option value="allow-scripts">Scripts Only</option>
+                <option value="allow-forms allow-scripts">Forms + Scripts</option>
+                <option value="custom">Custom...</option>
+              </select>
+            </div>
+            <div id="customSandboxContainer" style="display:none;">
+              <label for="customSandbox">Custom Sandbox Flags</label>
+              <input id="customSandbox" type="text" placeholder="allow-scripts allow-same-origin" />
+            </div>
+            <div>
+              <label for="scrollingMode">Scrolling</label>
+              <select id="scrollingMode">
+                <option value="auto">Auto</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+            <div>
+              <label for="loadingMode">Loading</label>
+              <select id="loadingMode">
+                <option value="eager">Eager</option>
+                <option value="lazy">Lazy</option>
+              </select>
+            </div>
+            <div>
+              <label for="borderSize">Border Size</label>
+              <input id="borderSize" type="text" value="3px" />
+            </div>
+            <div>
+              <label for="borderColor">Border Color</label>
+              <input id="borderColor" type="color" value="#ffffff" />
+            </div>
+          </div>
+          
+          <label for="zoomLevel">Zoom Level (<span id="zoomVal">1</span>x)</label>
+          <input id="zoomLevel" type="range" min="0.5" max="3" step="0.1" value="1" />
+
+          <label for="customCSS">Custom CSS for Iframe</label>
+          <textarea id="customCSS" rows="4" placeholder="Example: filter: grayscale(50%); border-radius: 10px;"></textarea>
+          
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+            <div>
+              <label for="transitionDuration">Transition Duration (ms)</label>
+              <input id="transitionDuration" type="number" value="300" min="0" max="2000" />
+            </div>
+            <div>
+              <label for="transitionTiming">Transition Timing</label>
+              <select id="transitionTiming">
+                <option value="ease">Ease</option>
+                <option value="linear">Linear</option>
+                <option value="ease-in">Ease In</option>
+                <option value="ease-out">Ease Out</option>
+                <option value="ease-in-out">Ease In Out</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- New iframe interaction controls -->
+          <div class="section-divider" style="margin-top:15px;">🖱️ Interaction Controls</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button onclick="enableFullscreen()" style="background:#764ba2; color:white;">_FULLSCREEN_</button>
+            <button onclick="captureScreenshot()" style="background:#3b82f6; color:white;">📷 Screenshot</button>
+            <button onclick="openInNewTab()" style="background:#10b981; color:white;">↗️ New Tab</button>
+            <button onclick="printIframe()" style="background:#8b5cf6; color:white;">🖨️ Print</button>
+            <button onclick="reloadIframe()" style="background:#f59e0b; color:white;">🔄 Reload</button>
+          </div>
+
+          <button onclick="applyAdvanced()" style="background:#764ba2; color:white; margin-top:8px;">Apply Advanced Settings</button>
+        </div>
+
+        <div class="buttons">
+          <button onclick="loadDirect()">Load Site</button>
+          <button onclick="showInfoPopup()">Learn About Paths</button>
+          <button onclick="resetIframe()">Reset</button>
+        </div>
+      </div>
+
+      <div class="frame-wrap">
+        <iframe id="viewer" src="about:blank" title="Custom Iframe Viewer"></iframe>
+      </div>
+    </div>
+
+    <!-- Expanded Popup with More Sections -->
+    <div id="popup" class="popup">
+      <div class="popup-content">
+        <h2>📖 Everything You Need to Know</h2>
+        
+        <h3>1. What is an Iframe?</h3>
+        <p>An iframe is like a magic window inside your webpage. It lets you show another whole website right here on the page — like putting a TV screen on your wall that plays a different channel from the internet!</p>
+        
+        <h3>2. How the Loading Paths Work</h3>
+        <ul>
+          <li><strong>Direct Load</strong>: Opens the site exactly as typed.</li>
+          <li><strong>Path options</strong>: Add extra words to reach different pages.</li>
+          <li><strong>Custom UTM</strong>: Adds fully customizable marketing params (source, medium, campaign, term, content).</li>
+          <li><strong>Smart Path Detection</strong>: Automatically tries common embed paths until one works.</li>
+          <li><strong>Custom Path</strong>: Specify your own path for specialized loading.</li>
+        </ul>
+        
+        <h3>3. Custom Headers & Encryption</h3>
+        <p>Headers (X-Tracking-ID, X-Source, X-Campaign) are injected invisibly—not in the URL. Perfect for ABM privacy. Enable encryption to hash sensitive parameters so they can't be tampered with.</p>
+        
+        <h3>4. Dynamic Resize & Aspect Ratio</h3>
+        <p>Auto-resize keeps your iframe perfectly sized to the content. Lock a 16:9 ratio with min/max constraints to prevent layout shifts that hurt conversion metrics.</p>
+        
+        <h3>5. Analytics Event Queue</h3>
+        <p>Events are buffered if the network is slow and retried with exponential backoff. UTM data is captured even on flaky connections—not fire-and-forget. Flush manually or let the queue auto-send.</p>
+        
+        <h3>6. Quick Tips</h3>
+        <ul>
+          <li>HTTPS is added automatically.</li>
+          <li>Try different paths if a site doesn't load.</li>
+          <li>Use Reset to start over.</li>
+          <li>The status bar shows queued events.</li>
+          <li>Save/Load settings to keep your config.</li>
+          <li>Smart Path Detection attempts common embed paths automatically.</li>
+          <li>Create custom presets for your favorite configurations.</li>
+        </ul>
+
+        <div class="popup-buttons">
+          <button onclick="closePopup()">Got it, close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Preload Info Popup -->
+    <div id="aiPreloadPopup" class="popup">
+      <div class="popup-content">
+        <h2>🤖 AI Assistant Information</h2>
+        
+        <h3>What is the AI Assistant?</h3>
+        <p>Our AI Assistant continuously optimizes your iframe loading experience by analyzing content, suggesting optimal settings, and automating common tasks.</p>
+        
+        <h3>How It Works</h3>
+        <ul>
+          <li><strong>Content Analysis</strong>: Identifies content type (video, code, docs, etc.)</li>
+          <li><strong>Smart Path Detection</strong>: Finds the best embedding endpoint automatically</li>
+          <li><strong>Preset Recommendations</strong>: Suggests optimal configurations based on content</li>
+          <li><strong>Visual Optimization</strong>: Adjusts size, borders, and styling for best presentation</li>
+          <li><strong>Security Suggestions</strong>: Recommends encryption for sensitive content</li>
+          <li><strong>Analytics Enhancement</strong>: Adds AI insights to tracking data</li>
+        </ul>
+        
+        <h3>Features Enabled by AI</h3>
+        <ul>
+          <li><strong>Automatic Preset Selection</strong>: Chooses the best starting point for your content</li>
+          <li><strong>Intelligent UTM Generation</strong>: Creates tracking parameters based on content type</li>
+          <li><strong>Dynamic Visual Tuning</strong>: Adapts appearance to content for optimal viewing</li>
+          <li><strong>Smart Encryption</strong>: Automatically enables security for sensitive sites</li>
+          <li><strong>Performance Insights</strong>: Provides load time estimates and optimization tips</li>
+          <li><strong>A/B Testing Generator</strong>: Creates UTM variants for marketing experiments</li>
+        </ul>
+        
+        <h3>Privacy Notice</h3>
+        <p>All AI processing happens locally in your browser. No personal data or URLs are sent to external servers. Your browsing activity remains completely private.</p>
+        
+        <div class="popup-buttons">
+          <button onclick="enableAIPreload()" style="background:#10b981; color:white;">Enable AI Assistant</button>
+          <button onclick="closeAIPopup()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Viewer Popup -->
+    <div id="analyticsPopup" class="popup">
+      <div class="popup-content" style="max-width:800px;">
+        <h2>📊 Analytics Events</h2>
+        <div id="analyticsEvents" style="max-height:400px; overflow-y:auto;">
+          <p>No events recorded yet.</p>
+        </div>
+        <div class="popup-buttons">
+          <button onclick="closeAnalyticsPopup()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
