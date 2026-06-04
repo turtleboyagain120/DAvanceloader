@@ -19,6 +19,14 @@ body {
   text-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
+.version {
+  font-size: 1.2rem;
+  background: rgba(255,255,255,0.2);
+  padding: 4px 10px;
+  border-radius: 20px;
+  vertical-align: super;
+}
+
 .subtitle {
   margin: 0 0 24px;
   color: #e0e7ff;
@@ -69,6 +77,23 @@ input:focus, select:focus, textarea:focus {
   gap: 12px;
   margin-top: 8px;
   flex-wrap: wrap;
+}
+
+.preset-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #dbeafe;
+  color: #1e40af;
+  transition: all 0.2s;
+}
+
+.preset-btn:hover {
+  background: #bfdbfe;
+  transform: translateY(-1px);
 }
 
 button {
@@ -177,4 +202,20 @@ textarea {
 
 .popup-content p {
   line-height: 1.6;
+}
+
+.popup-content ul {
+  padding-left: 20px;
+}
+
+.popup-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.popup-buttons button {
+  padding: 12px 20px;
+  font-size: 15px;
 }

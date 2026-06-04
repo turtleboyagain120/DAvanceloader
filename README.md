@@ -12,304 +12,399 @@
 [![Encryption](https://img.shields.io/badge/Encryption-SHA256-red.svg)](https://github.com/turtleboyagain120/iframe-loader)
 [![Contributors](https://img.shields.io/badge/Contributors-Welcome-blueviolet.svg)](https://github.com/turtleboyagain120/iframe-loader)
 
-# ✨ DAvanceloader - the IFRAME Loader
+# DAvanceloader: V1 → V2 Upgrade Guide
 
-**Big, flexible iframe with advanced tracking, encryption, resize & analytics**
-
-A production-ready tool for embedding and controlling iframes with custom headers, UTM parameters, dynamic resizing, encryption, and event-based analytics.
+**Version 2.0.0** brings a major refactor from **vanilla HTML/JS to React + TypeScript**, with production-ready backend integration and improved architecture.
 
 ---
 
-## Features
+## 🎯 What Changed: At a Glance
 
-- 🎯 **Multiple Loading Modes** — Direct, paths (`/embed`, `/home`, `/dashboard`), query parameters, custom UTM
-- 🔐 **Custom Headers & Encryption** — Inject X-headers, SHA-256 parameter encryption, prevent DevTools tampering
-- 📐 **Dynamic Resize** — Auto-resize based on content, aspect ratio locking, min/max height constraints
-- 📊 **Analytics Queue** — Event buffering, exponential backoff retry (up to 5 retries), network resilience
-- 🔑 **API Key Support** — Multiple key format options (`apikey`, `token`, `access_token`, `key`)
-- 💾 **Settings Persistence** — LocalStorage save/load for quick configuration switching
-- 🎨 **Advanced Visual Options** — Custom CSS, zoom, border styling, sandbox controls, scrolling modes
-- ⚛️ **TypeScript Ready** — Full React component blueprint + type interfaces included
+| Aspect | V1 | V2 |
+|--------|----|----|
+| **Framework** | Vanilla JS | React + TypeScript |
+| **Architecture** | Single HTML file + scripts | Component-based + engine class |
+| **Type Safety** | None | Full TypeScript interfaces |
+| **Backend** | None (analytics only) | Spring Boot scaffold included |
+| **Code Organization** | Inline functions | Modular, reusable components |
+| **Maintainability** | Manual DOM manipulation | React state management |
+| **React Ready** | Blueprint only | Production component |
 
 ---
 
-## Quick Start
+## 📋 Core Feature Parity
 
-### 1. Open the Tool
-```bash
-# Just open index.html in your browser
-open index.html
+**All V1 features are preserved in V2:**
+
+✅ 10+ loading modes (direct, paths, query, UTM)  
+✅ Custom headers (X-Tracking-ID, X-Source, X-Campaign)  
+✅ SHA-256 parameter encryption  
+✅ Dynamic iframe resizing with aspect ratio lock  
+✅ Analytics queue with exponential backoff retry (5 max)  
+✅ Settings persistence (localStorage)  
+✅ API key injection (multiple formats)  
+✅ Advanced visual options (zoom, border, sandbox, scrolling)  
+✅ YAML config + presets  
+
+---
+
+## 🔧 What's New in V2
+
+### 1. **React Component Architecture**
+```typescript
+// V1: Vanilla functions
+function loadSite() { ... }
+function buildUrl() { ... }
+
+// V2: Component-based
+<IframeLoader />  // Single drop-in component
 ```
 
-### 2. Enter a Website URL
-```
-example.com
-youtube.com
-tumblr.com
-github.com
-```
-
-### 3. Choose a Loading Path
-- **Direct Load** — Load the site as-is
-- **Path: /embed** — Try the embed endpoint
-- **Query: Custom UTM** — Add marketing parameters
-- Other paths: `/home`, `/dashboard`, `/mobile`, `/viewer`, `/index.html`
-
-### 4. Click "Load Site"
-The iframe loads in the panel below with all your settings applied.
-
-### 5. (Optional) Save Settings
-Click **💾 Save Settings** to persist your config to localStorage.
+**Benefits:**
+- Reusable across projects
+- State management built-in
+- Composable with other React apps
+- Hot reload support
 
 ---
 
-## How It Works
-
-### Loading Modes
-Each mode constructs the URL differently:
-
-| Mode | Example |
-|------|---------|
-| Direct | `https://example.com` |
-| Path: /embed | `https://example.com/embed` |
-| Path: /dashboard | `https://example.com/dashboard` |
-| Query: ?iframe=true | `https://example.com?iframe=true` |
-| Query: Custom UTM | `https://example.com?utm_source=X&utm_medium=Y&utm_campaign=Z` |
-
-### Custom Headers
-Headers like `X-Tracking-ID`, `X-Source`, `X-Campaign` are injected via postMessage proxy — they don't appear in the URL, keeping them invisible to basic inspection.
-
-### Encryption
-Enable **SHA-256 encryption** to hash all UTM and query parameters. This prevents DevTools tampering and keeps tracking data secure.
-
-### Dynamic Resize
-With **Auto-resize** enabled, the iframe grows/shrinks based on content height while respecting aspect ratio and min/max constraints. Great for eliminating layout shift.
-
-### Analytics Queue
-Events are buffered and sent in batches. If the network fails:
-1. Event is queued
-2. Retries with exponential backoff (1s → 2s → 4s → 8s → 16s)
-3. Max 5 retries before dropping
-4. Manually flush with **Flush Queue Now** button
-
----
-
-## Configuration
-
-### Basic Settings
-- **Website URL** — The site to embed (https:// added automatically)
-- **Choose Loading Path** — How to construct the URL
-- **API Key** — Optional authentication token
-- **How to attach the key** — Format (apikey=KEY, token=KEY, etc.)
-
-### Custom Headers & Encryption
-- **X-Tracking-ID** — Custom tracking identifier
-- **X-Source** — Source of traffic
-- **X-Campaign** — Campaign identifier
-- **Encrypt UTM & query parameters** — Enable SHA-256 hashing
-
-### Dynamic Resize & Aspect Ratio
-- **Auto-resize based on content** — Dynamically adjust height
-- **Aspect Ratio** — Lock ratio (e.g., 16:9, 4:3)
-- **Min Height / Max Height** — Constraints (e.g., 400px, 2000px)
-
-### Advanced Visual Options
-- **Width / Height** — Custom dimensions (px, %, vh, vw)
-- **Sandbox** — Security restrictions (scripts, forms, same-origin)
-- **Scrolling** — auto / yes / no
-- **Border Size & Color** — Custom styling
-- **Zoom Level** — Scale the iframe (0.5x to 2x)
-- **Custom CSS** — Inject CSS directly into iframe styling
-
-### Analytics
-- **Analytics Endpoint** — Where to send events (default: httpbin.org/post)
-- **Flush Queue Now** — Manually send buffered events
-- **Clear Queue** — Empty all pending events
-
----
-
-## File Structure
-
+### 2. **TypeScript Engine Class**
+```typescript
+// V2: Fully typed engine
+class IframeLoaderEngine {
+  async buildUrl(config: IframeLoaderState): Promise<string>
+  async flushQueue(endpoint: string): Promise<void>
+  enqueueEvent(eventType: string, data: Record<string, unknown>): void
+}
 ```
-.
-├── index.html          # Main UI
-├── styles.css          # Styling (gradient, responsive, animations)
-├── utils.js            # Helpers (debounce, throttle, Storage wrapper)
-├── script.js           # Core logic (URL building, iframe management, analytics)
-├── app.tsx             # React/TypeScript blueprint (for reference/porting)
-├── yml.yml             # Configuration presets & schema
-├── .gitignore          # Git ignore rules
-└── README.md           # This file
+
+**Benefits:**
+- Type hints in IDE
+- Compile-time error checking
+- Self-documenting code
+- Better for teams
+
+---
+
+### 3. **TypeScript Interfaces (Complete Type System)**
+```typescript
+interface IframeLoaderState {
+  siteUrl: string;
+  mode: string;
+  headers: HeaderConfig;
+  utm: UTMConfig;
+  resize: ResizeConfig;
+  visual: VisualConfig;
+  // ... more
+}
+```
+
+All configuration objects are fully typed — no guessing required.
+
+---
+
+### 4. **Backend Integration (Spring Boot)**
+```java
+@SpringBootApplication
+public class BackendApplication {
+  // Ready for extending with:
+  // - REST endpoints for analytics
+  // - User authentication
+  // - Iframe policy management
+  // - Event logging
+}
+```
+
+V2 includes a basic Spring Boot scaffold for building production backends.
+
+---
+
+### 5. **Improved File Structure**
+```
+V1:
+├── index.html       (everything in one file)
+├── styles.css
+├── script.js
+└── utils.js
+
+V2:
+├── App (1).tsx          (React entry point)
+├── IframeLoader.tsx     (main component)
+├── app.tsx              (TypeScript engine + interfaces)
+├── utils.js             (shared helpers)
+├── styles.css
+├── BackendApplication.java  (Spring Boot)
+└── yml.yml              (config presets)
 ```
 
 ---
 
-## Usage Examples
-
-### Example 1: Load YouTube with UTM Tracking
-```
-1. URL: youtube.com
-2. Path: Query: Custom UTM
-3. utm_source: my_website
-4. utm_medium: embedded
-5. utm_campaign: q4_content
-6. Click: Load Site
-```
-
-**Result:** `https://www.youtube.com?utm_source=my_website&utm_medium=embedded&utm_campaign=q4_content`
-
-### Example 2: Embed Dashboard with API Key
-```
-1. URL: dashboard.company.com
-2. Path: Path: /dashboard
-3. API Key: your_secret_token_here
-4. Key Format: token
-5. Check: Append key to URL
-6. Click: Load Site
-```
-
-**Result:** `https://dashboard.company.com/dashboard?token=your_secret_token_here`
-
-### Example 3: Custom Headers + Encryption
-```
-1. URL: example.com
-2. X-Tracking-ID: campaign-abc-123
-3. X-Source: linkedin-outreach
-4. X-Campaign: q4-enterprise
-5. Check: Encrypt UTM & query parameters
-6. Click: Load Site
-```
-
-Headers are injected invisibly; parameters are SHA-256 hashed.
-
----
-
-## Keyboard Shortcuts
-
-- **Load Site** — Loads the configured iframe
-- **Learn About Paths** — Opens help popup
-- **Reset** — Clears all settings and reloads blank iframe
-
----
-
-## Browser Support
-
-- Chrome/Chromium 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-
-**Note:** Some sites may refuse to load in iframes due to `X-Frame-Options: DENY` headers. This is a site security feature, not a bug.
-
----
-
-## Advanced: React Integration
-
-The project includes a **TypeScript component blueprint** (`app.tsx`):
+### 6. **IframeLoaderEngine Class (Reusable)**
+V2 exports `IframeLoaderEngine` as a standalone class that can be used outside React:
 
 ```typescript
 import { IframeLoaderEngine, defaultState } from './app';
 
 const engine = new IframeLoaderEngine();
 const url = await engine.buildUrl(config);
-engine.enqueueEvent('page_viewed', { url, timestamp: Date.now() });
+await engine.flushQueue('https://your-analytics.com/events');
 ```
 
-To use with React:
+Perfect for:
+- Next.js / Vue / Angular
+- Node.js backends
+- CLI tools
+- Testing
+
+---
+
+## 📚 Migration Path
+
+### Scenario 1: **Using V1 as HTML file**
 ```bash
-npx create-react-app iframe-loader --template typescript
-cp app.tsx src/
+# V1: Open index.html directly
+open index.html
+
+# V2: Use as React component
+npm install
+npm start
+```
+
+### Scenario 2: **Using V1 TypeScript types (from app.tsx)**
+```typescript
+// V1: Blueprint only
+export type { IframeLoaderState }
+
+// V2: Full implementation ready to use
+import IframeLoaderEngine from './app';
+const engine = new IframeLoaderEngine();
+```
+
+### Scenario 3: **Integrating into existing React app**
+```typescript
+// V2: Drop-in component
+import IframeLoader from './IframeLoader';
+
+function MyApp() {
+  return (
+    <div>
+      <h1>My App</h1>
+      <IframeLoader />  // Just add this
+    </div>
+  );
+}
 ```
 
 ---
 
-## Configuration Presets (YAML)
+## 🚀 Breaking Changes
 
-The `yml.yml` file contains preset configurations:
+**None.** ✨
 
-```yaml
-presets:
-  youtube:
-    site_url: "youtube.com"
-    mode: "pathEmbed"
-    resize:
-      aspect_ratio: "16:9"
-  
-  github:
-    site_url: "github.com"
-    mode: "pathDashboard"
-    api:
-      key_format: "token"
+All URL building logic, analytics, and encryption work identically between V1 and V2. The internal implementation is the same — just reorganized.
+
+If you were using the V1 vanilla JS directly, the API contract is preserved:
+- Same config object shape
+- Same event queue behavior
+- Same URL output
+- Same localStorage keys
+
+---
+
+## 📖 Usage Comparison
+
+### Loading a Site
+
+**V1:**
+```html
+<!-- Fill form, click "Load Site" button -->
 ```
 
-Load presets by editing the JavaScript or extending the UI.
+**V2:**
+```typescript
+import IframeLoader from './IframeLoader';
+
+function App() {
+  return <IframeLoader />;
+}
+```
+
+Same UI, cleaner code.
 
 ---
 
-## Performance Tips
+### Programmatic URL Building
 
-1. **Auto-Resize** — Disable if the iframe content doesn't change height
-2. **Analytics Queue** — Batching reduces network overhead
-3. **Zoom** — Keep at 1x unless you have a specific reason
-4. **Sandbox** — Restrict permissions only if needed (impacts functionality)
-5. **Custom CSS** — Minimize; heavy filters (blur, shadow) impact performance
+**V1:**
+```javascript
+async function buildUrl(config) {
+  let url = config.siteUrl;
+  if (config.mode === "pathEmbed") {
+    url = url + "/embed";
+  }
+  // ... etc
+}
+```
 
----
+**V2:**
+```typescript
+import { IframeLoaderEngine } from './app';
 
-## Troubleshooting
+const engine = new IframeLoaderEngine();
+const url = await engine.buildUrl(config);
+```
 
-### "Site refused to connect"
-- The site has `X-Frame-Options: DENY` headers
-- Try a different loading path (e.g., `/embed` instead of direct)
-- Some sites intentionally block iframe embedding for security
-
-### "Iframe is blank"
-- Check browser console (F12 → Console tab) for errors
-- Verify the URL is correct and reachable
-- Try removing API key or custom headers
-- Use a CORS proxy if the site blocks cross-origin requests
-
-### "Custom headers not working"
-- Headers are injected via postMessage — only effective if the site listens for them
-- Most public sites don't read custom headers from iframes
-- For authenticated APIs, use API Key instead
-
-### "Events not sending to analytics endpoint"
-- Check that the endpoint URL is correct
-- Verify CORS is enabled on your analytics backend
-- Use **Flush Queue Now** to manually trigger sending
-- Check browser Network tab (F12) to see the request
-
-### "Settings not saving"
-- LocalStorage might be disabled or full
-- Check browser settings → Privacy → Cookies
-- Clear browser cache and try again
+Same logic, better organization.
 
 ---
 
-## License
+### Analytics
 
-This project is licensed under the **MIT License** — see [LICENSE](LICENSE) file for details.
+**V1 & V2 (identical):**
+```javascript
+engine.enqueueEvent('page_viewed', { url: 'example.com' });
+engine.flushQueue('https://analytics.example.com/events');
+```
 
-You are free to use, modify, and distribute this tool with attribution.
-
----
-
-## Contributing
-
-Found a bug? Have a feature idea? Feel free to:
-1. Open an issue
-2. Fork and submit a pull request
-3. Discuss improvements
+No changes needed.
 
 ---
 
-## Credits
+## 🔄 Backward Compatibility
 
-Built with ❤️ for developers, marketers, and anyone who needs flexible iframe control.
+**V2 localStorage keys are identical to V1:**
+```javascript
+// Both V1 and V2 use:
+localStorage.getItem('iframeLoaderSettings')
+
+// Same object shape:
+{
+  siteUrl: "example.com",
+  mode: "direct",
+  utm: { ... },
+  // ... etc
+}
+```
+
+Migrate from V1 to V2 and your saved settings load automatically. ✅
 
 ---
 
+## 📊 Performance
+
+**V1:** Vanilla JS — direct DOM manipulation  
+**V2:** React — virtual DOM diffing, optimal updates
+
+For a single iframe loader, performance is identical. React overhead is negligible at this scale.
+
+---
+
+## 🛠️ For Developers
+
+### Use V2 Engine in Node.js / CLI
+```typescript
+import { IframeLoaderEngine, defaultState } from './app';
+
+const engine = new IframeLoaderEngine();
+const config = { ...defaultState, siteUrl: 'github.com' };
+const url = await engine.buildUrl(config);
+console.log(url);  // https://github.com
+```
+
+### Extend the Component
+```typescript
+import IframeLoader from './IframeLoader';
+
+export function CustomIframeLoader() {
+  return (
+    <div className="my-custom-wrapper">
+      <IframeLoader />
+    </div>
+  );
+}
+```
+
+### Use in Next.js / Remix
+```typescript
+import dynamic from 'next/dynamic';
+
+const IframeLoader = dynamic(() => import('./IframeLoader'), {
+  ssr: false  // Client-side only
+});
+
+export default IframeLoader;
+```
+
+---
+
+## 🎁 What You Get
+
+**V2 Includes:**
+
+- ✅ React component (`IframeLoader.tsx`)
+- ✅ TypeScript engine + full interfaces (`app.tsx`)
+- ✅ Spring Boot backend scaffold (`BackendApplication.java`)
+- ✅ Same HTML UI, styled as before (`index.html`, `styles.css`)
+- ✅ Utility helpers (`utils.js`)
+- ✅ Config presets (`yml.yml`)
+- ✅ React entry point (`App (1).tsx`)
+
+**All in one package.** Pick and use what you need.
+
+---
+
+## 📦 Version History
+
+| Version | Type | Major Changes |
+|---------|------|---------------|
+| **V1** | Vanilla JS | Initial release, full-featured |
+| **V2** | React + TypeScript | Component refactor, type safety, backend scaffold |
+
+---
+
+## ❓ FAQ
+
+### "Should I upgrade from V1?"
+
+- **If you're building a React app:** Yes. Use V2 component directly.
+- **If you're using V1 as a standalone HTML file:** No need. V1 works great.
+- **If you want TypeScript:** Yes. V2 has full types.
+- **If you want a backend:** Yes. V2 includes Spring Boot scaffold.
+
+### "Will my V1 settings load in V2?"
+
+Yes. localStorage keys are identical.
+
+### "Can I use V2 engine outside React?"
+
+Yes. Import `IframeLoaderEngine` and use it anywhere (Node, CLI, vanilla JS).
+
+### "Is V1 still supported?"
+
+V1 is feature-complete and stable. V2 is the new direction for React projects.
+
+---
+
+## 🚀 Getting Started with V2
+
+```bash
+# Clone/download V2 files
+cd dadvanceloader-v2
+
+# Install dependencies
+npm install
+
+# Start dev server
+npm start
+
+# Opens http://localhost:3000 with IframeLoader component
+```
+
+Same features. Better code. Ready for teams.
+
+---
+**Made with ❤️ for developers who love flexibility.**
+---
 ## See Also
 
 - [MDN: HTMLIFrameElement](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe)
