@@ -1,7 +1,7 @@
 <img width="652" height="646" alt="image" src="https://github.com/user-attachments/assets/c213c0a5-5bad-4836-9c0b-1f4100858820" />
 
 
-[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![MIT License](https://img.shields.io/badge/License-FomPsl-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-1.0.0-green.svg)](https://github.com/turtleboyagain120/iframe-loader/releases)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen.svg)](https://github.com/turtleboyagain120/iframe-loader)
 [![JavaScript](https://img.shields.io/badge/Language-JavaScript-yellow.svg)](https://github.com/turtleboyagain120/iframe-loader)
